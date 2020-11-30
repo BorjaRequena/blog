@@ -1,1 +1,1 @@
-Sitemap: https://borjarequena.github.io/blog/sitemap.xml
+Sitemap: https://brequena.com/blog/sitemap.xml

@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>https://brequena.com/machine%20learning/fastai/2020/11/16/ml-applications.html</loc>
+<loc>https://brequena.com/machine%20learning/fastai/2020/11/14/ml-applications-cv.html</loc>
+<lastmod>2020-11-14T00:00:00-06:00</lastmod>
+</url>
+<url>
+<loc>https://brequena.com/machine%20learning/fastai/2020/11/15/ml-applications-nlp.html</loc>
+<lastmod>2020-11-15T00:00:00-06:00</lastmod>
+</url>
+<url>
+<loc>https://brequena.com/machine%20learning/fastai/2020/11/16/ml-applications-tab.html</loc>
 <lastmod>2020-11-16T00:00:00-06:00</lastmod>
 </url>
 <url>

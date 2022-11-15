@@ -1,0 +1,22 @@
+project:
+  type: website
+
+website:
+  title: "Borja Requena"
+  description: "A descriptive description"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/BorjaRequena
+      - icon: twitter
+        href: https://twitter.com/BorjaRequena
+format:
+  html:
+    theme: sandstone
+    css: styles.css
+execute:
+  freeze: auto
+
+
+

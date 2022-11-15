@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "Borja Requena"
 image: profile.jpg
 about:
   template: jolla
@@ -16,4 +16,4 @@ about:
 
 ---
 
-About this blog
+I'm migrating my former blog and this page is still under construction. Thanks for visiting :D

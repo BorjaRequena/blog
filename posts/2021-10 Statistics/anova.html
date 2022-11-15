@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.242">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Borja Requena">
+<meta name="dcterms.date" content="2021-10-05">
+<meta name="description" content="ANOVA is one of the most fundamental techniques in data analysis. It allows us to tell whether there are statistically relevant differences between several independent groups of data. Here, we provide a conceptual introduction about the technique with code examples from scratch.">
+
+<title>Borja Requena - Introduction to analysis of variance (ANOVA)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Borja Requena</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html">About</a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/BorjaRequena"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/BorjaRequena"><i class="bi bi-twitter" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Introduction to analysis of variance (ANOVA)</h1>
+                  <div>
+        <div class="description">
+          ANOVA is one of the most fundamental techniques in data analysis. It allows us to tell whether there are statistically relevant differences between several independent groups of data. Here, we provide a conceptual introduction about the technique with code examples from scratch.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">Statistics</div>
+                <div class="quarto-category">Data Analysis</div>
+                <div class="quarto-category">GLM</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Borja Requena </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 5, 2021</p>
+      </div>
+    </div>
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#anova" id="toc-anova" class="nav-link" data-scroll-target="#anova">ANOVA</a>
+  <ul class="collapse">
+  <li><a href="#variance" id="toc-variance" class="nav-link" data-scroll-target="#variance">Variance</a></li>
+  <li><a href="#partitioning-the-variability" id="toc-partitioning-the-variability" class="nav-link" data-scroll-target="#partitioning-the-variability">Partitioning the variability</a></li>
+  <li><a href="#f-ratio" id="toc-f-ratio" class="nav-link" data-scroll-target="#f-ratio">F-ratio</a></li>
+  </ul></li>
+  <li><a href="#example-fertilizers" id="toc-example-fertilizers" class="nav-link" data-scroll-target="#example-fertilizers">Example: fertilizers</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p>This post is part of a series in which we provide an introduction to statistics and data analysis introducing analysis of variance (ANOVA) and <a href="https://brequena.com/statistics/data%20analysis/regression/glms/2021/10/06/regression.html">regression</a>. They contain most of the teaching material developed for the <a href="https://mmres.bist.eu/">Msc of Multidisciplinary Research in Experimental Sciences (BIST)</a>.</p>
+<p>The main goal is to provide an intuition about the main ideas behind the different techniques together with simple code examples that implement them from scratch.</p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>In any field of study, data comes with all kinds of noise and variability. Hence, it is often difficult to compare the data extracted from different experiments straight away, unless there are major obvious differences between them. Let us, first, build some intuition with an example and, then, dive into the formalism.</p>
+<p>For instance, we may want to compare the performance of different drugs to treat a certain disease. In this case, we would collect data from patients treated with each drug and we would obtain several groups of data, each with their corresponding variability. Patients treated with the same drug may undergo very different recovery processes which depend on several different factors, such as age, health condition, environmental conditions, etc. Therefore, in order to tell whether some drugs work better than others, we must be able to distinguish between the variance in the data due to the usage of different drugs and the variance due to all the other factors.</p>
+<p>Below we illustrate a couple of examples with synthetic data that show two cases in which we compare three populations with fixed means (black lines) and different variability. In the left one, the main contribution to the variability of the data is due to using different drugs, making it easy to compare them and study their effects. On the contrary, the right one shows a case in which the effect of the drugs is not so obvious. The means are still different, but the question is whether these differences remain significant, that is when they are larger than what we would expect by chance alone. Furthermore, as the variance in each population increases, the error in the estimated mean (red dashed line) increases.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>It is important to distinguish between the real mean <span class="math inline">\(\mu\)</span> (black line) and the sample estimate <span class="math inline">\(\bar{y}\)</span> (red line). The real mean is inaccessible for us and the best we can do is estimate it from our data. Usually, the more datapoints we gather, the better our estimate will become.</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> synthetic_data(n, means, stds):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create a synthetic dataset with `n` samples per mean and standard deviation."</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [np.ones(n)<span class="op">*</span>m <span class="op">+</span> std<span class="op">*</span>np.random.randn(n) <span class="cf">for</span> m, std <span class="kw">in</span> <span class="bu">zip</span>(means, stds)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">7</span>) <span class="co"># Set random seed for reproducibility</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n_i <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>means <span class="op">=</span> [<span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">0.65</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>stds_easy, stds_hard <span class="op">=</span> [<span class="fl">0.01</span>]<span class="op">*</span><span class="dv">3</span>, [<span class="fl">0.15</span>]<span class="op">*</span><span class="dv">3</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>datasets <span class="op">=</span> synthetic_data(n_i, means, stds_easy), synthetic_data(n, means, stds_hard)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(n_i<span class="op">*</span><span class="bu">len</span>(means))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, ds <span class="kw">in</span> <span class="bu">zip</span>(axes, datasets):</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    ax.scatter(x, np.concatenate(ds, axis<span class="op">=</span><span class="dv">0</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i, m <span class="kw">in</span> <span class="bu">enumerate</span>(means):</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        ax.hlines(m, x[n<span class="op">*</span>i], x[n<span class="op">*</span>(i<span class="op">+</span><span class="dv">1</span>)<span class="op">-</span><span class="dv">1</span>], alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        ax.hlines(np.mean(ds[i]), x[n_i<span class="op">*</span>i], x[n_i<span class="op">*</span>(i<span class="op">+</span><span class="dv">1</span>)<span class="op">-</span><span class="dv">1</span>], colors<span class="op">=</span><span class="st">'r'</span>, linestyles<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    ax.grid()</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    ax.tick_params(labelsize<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="fl">0.1</span>, <span class="fl">1.15</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Value"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Sample"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="anova_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Having seen the previous examples, let us formalize the analysis to see how we treat and quantify these situations.</p>
+</section>
+<section id="anova" class="level2">
+<h2 class="anchored" data-anchor-id="anova">ANOVA</h2>
+<p>The main question we want to address with ANOVA is whether there are significant differences between the means of different groups of data. Formally, we confront the null hypothesis that all groups are equal <span class="math inline">\(H_0:\mu_1=\mu_2=\dots=\mu_a\)</span>, where <span class="math inline">\(a\)</span> is the number of groups, with the hypothesis that, at least, two means are different <span class="math inline">\(H_a: \mu_i\neq\mu_j\)</span> for some <span class="math inline">\(i,j\in [1, a]\)</span>.</p>
+<p>However, we do not compare the means right away. Instead, we focus on the variability of the data. The idea is to separate the overall variability in two parts: the variation within the groups and the variation between them. Intuitively, we find significant differences whenever there is little variation within the groups and large variation between them, as in the previous left figure.</p>
+<section id="variance" class="level3">
+<h3 class="anchored" data-anchor-id="variance">Variance</h3>
+<p>The variance measures the deviation of the data around its mean. Hence, we first need to estimate the mean <span class="math inline">\(\bar{y}\)</span> and then compute the deviations of each data point with respect to it <span class="math inline">\(y_i-\bar{y}\)</span>. However, deviations take positive and negative values adding up to zero, by definition, so we need to consider their <strong>sum of squares</strong> (SS) instead as a measure of variability for the data <span class="math display">\[SS= \sum_{i=1}^n (y_i-\bar{y})^2,\]</span> which ensures that all the terms in the sum are positive and contribute to the measure of the variation.</p>
+<p>However, SS is an extensive measure that increases with the number of samples, which would not allow us to compare the variability between groups of different sizes. Therefore, we need to normalize it, obtaining what’s known as the <strong>variance</strong>. The sample variance <span class="math inline">\(s^2\)</span> is obtained normalizing the SS by its number of degrees of freedom (DF) such that <span class="math display">\[s^2 = \frac{1}{n-1}\sum_{i=1}^n (y_i-\bar{y})^2.\]</span> In a distribution with <span class="math inline">\(n\)</span> samples, we only have <span class="math inline">\((n-1)\)</span> DF provided that the deviations are subject to the constraint that they must add up to zero. Intuitively, if we had <span class="math inline">\(n-1\)</span> deviations, we could guess the value of the last one and so it is “not free”.</p>
+<p>In ANOVA, the variance is often refered to as <strong>mean square</strong> (MS).</p>
+</section>
+<section id="partitioning-the-variability" class="level3">
+<h3 class="anchored" data-anchor-id="partitioning-the-variability">Partitioning the variability</h3>
+<p>As previously introduced, we split the overall variability of the data into two components: the variability between and within the different groups. In order to asses whether there are significant differences between groups, we need to be able to compare these two variabilities. If the variability between groups is much larger than the one within groups, we can conclude that they are different. Conversely, if the variability within groups is very large, we cannot tell the groups apart. More precisely, we compare their associated MS by computing the SS for each component and their DF, so let us introduce the following quantities:<br>
+- <span class="math inline">\(SS_{total} = \sum_{i, j}^{a, n_i}(y_{ij} - \bar{y})^2\)</span> is the total SS of the samples with respect to the <strong>grand mean</strong> <span class="math inline">\(\bar{y}\)</span>, which is the mean of all samples. It is, therefore, a measure of the total variability of the data.<br>
+- <span class="math inline">\(SS_{within} = \sum_{i, j}^{a, n_i} (y_{ij} - \bar{y_i})^2\)</span> is the SS of the samples with respect to their group mean <span class="math inline">\(\bar{y_i}\)</span>. This quantity is also known as the <strong>error SS</strong> and measures the variability of the data within the groups. - <span class="math inline">\(SS_{between} = \sum_{i}^a n_i(\bar{y_i} - \bar{y})^2\)</span> is the SS of the group mean with respect to the grand mean. This quantity is also known as the <strong>treatment SS</strong> and measures the variability of the data between the groups.</p>
+<p>In the previous equations, the indexes <span class="math inline">\(i,j\)</span> respectively denote group <span class="math inline">\(i\in[1,a]\)</span> and sample within the group <span class="math inline">\(j\in[1, n_i]\)</span>, where <span class="math inline">\(n_i\)</span> denotes the number of samples in group <span class="math inline">\(i\)</span>. This way, we can write the total SS in terms of the other two <span class="math display">\[SS_{total} = SS_{within} + SS_{between}\]</span></p>
+<p>In the plots below we illustrate the distances quantified by each of the introduced terms using the previous example data.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ds <span class="op">=</span> np.concatenate(datasets[<span class="dv">1</span>], axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(ds.size)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">4</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Total SS</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>grand_mean <span class="op">=</span> ds.mean()</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].scatter(x, ds)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].hlines(grand_mean, x[<span class="dv">0</span>], x[<span class="op">-</span><span class="dv">1</span>], alpha<span class="op">=</span><span class="fl">0.9</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> xi, yi <span class="kw">in</span> <span class="bu">zip</span>(x, ds):</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].vlines(xi, yi, grand_mean, linestyles<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="vs">r"$SS_</span><span class="sc">{total}</span><span class="vs">$"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].scatter(x, ds)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(datasets[<span class="dv">1</span>])):</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    idx0, idx1 <span class="op">=</span> n_i<span class="op">*</span>i, n_i<span class="op">*</span>(i<span class="op">+</span><span class="dv">1</span>) <span class="cf">if</span> i <span class="op">!=</span> <span class="bu">len</span>(datasets[<span class="dv">1</span>])<span class="op">-</span><span class="dv">1</span> <span class="cf">else</span> <span class="va">None</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    s <span class="op">=</span> <span class="bu">slice</span>(idx0, idx1)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    xs, ys <span class="op">=</span> x[s], ds[s]</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    group_mean <span class="op">=</span> np.mean(ds[s])</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].hlines(group_mean, xs[<span class="dv">0</span>], xs[<span class="op">-</span><span class="dv">1</span>], colors<span class="op">=</span><span class="st">'r'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">2</span>].hlines(group_mean, xs[<span class="dv">0</span>], xs[<span class="op">-</span><span class="dv">1</span>], colors<span class="op">=</span><span class="st">'r'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> xi, yi <span class="kw">in</span> <span class="bu">zip</span>(xs, ys):</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        axes[<span class="dv">1</span>].vlines(xi, yi, group_mean, linestyles<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        axes[<span class="dv">2</span>].vlines(xi, grand_mean, group_mean, linestyles<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="vs">r"$SS_</span><span class="sc">{within}</span><span class="vs">$"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].hlines(grand_mean, x[<span class="dv">0</span>], x[<span class="op">-</span><span class="dv">1</span>], alpha<span class="op">=</span><span class="fl">0.9</span>)</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="vs">r"$SS_</span><span class="sc">{between}</span><span class="vs">$"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> axes:</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="fl">0.1</span>, <span class="fl">1.15</span>)</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    ax.tick_params(labelsize<span class="op">=</span><span class="dv">13</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Value"</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"Sample"</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="anova_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Similarly, we can define the MS associated to each SS by dividing with the proper degrees of freedom: - <span class="math inline">\(DF_{total} = n-1\)</span> is the total number of degrees of freedom. - <span class="math inline">\(DF_{within} = n-a\)</span> is the number of degrees of freedom associated to the variation within groups. For each group we have <span class="math inline">\((n_i - 1)\)</span> degrees of freedom. - <span class="math inline">\(DF_{between} = a-1\)</span> is the number of degrees of freedom associated to the variation between groups. For <span class="math inline">\(a\)</span> groups, we can infer the last deviation from the previous <span class="math inline">\(a-1\)</span>.</p>
+<p>Analogously to the SS, DF fulfill the relationship <span class="math inline">\(DF_{total} = DF_{within} + DF_{between}\)</span>.</p>
+<p>With these quantities we can define the MS corresponding to the variation within groups <span class="math inline">\(MS_{within} = SS_{within}/DF_{within}\)</span> and between groups <span class="math inline">\(MS_{between} = SS_{between}/DF_{between}\)</span>.</p>
+</section>
+<section id="f-ratio" class="level3">
+<h3 class="anchored" data-anchor-id="f-ratio">F-ratio</h3>
+<p>With the partition of variability that we have introduced, we can compute the <strong>F-ratio</strong> <span class="math display">\[F=\frac{MS_{between}}{MS_{within}},\]</span> which quantifies the relationship between the amount of variation in both regimes. <span class="math inline">\(F\gg 1\)</span> indicates that there may be large differences between groups and <span class="math inline">\(F\leq 1\)</span> suggests that there are no differences between them.</p>
+<p>Nevertheless, since we are dealing with sample estimates, <span class="math inline">\(F\)</span> is a random variable that can take a wide range of values. This phenomenon is described by the <strong>F-distribution</strong>, which represents the likelihood to obtain the values of <span class="math inline">\(F\)</span> under the null hypothesis given <span class="math inline">\(DF_{within}, DF_{between}\)</span>. With this, we only accept that there are significant differences between groups if <span class="math inline">\(F\)</span> is sufficiently large to be achieved by chance with a probability lower than <span class="math inline">\(0.05\)</span>. This is known as an <strong>F-test</strong>.</p>
+<p>Below, we provide a couple of examples of F-distribution given <span class="math inline">\((2, 27)\)</span> and <span class="math inline">\((9, 40)\)</span> DF denoting (between, within). The first example is equivalent to having 3 groups with 10 samples each and the second is equivalent to 10 groups with 50 samples each. This distribution has a closed form as shown <a href="https://en.wikipedia.org/wiki/F-distribution#Definition">here</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f_distribution(x, d_b, d_w):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"F-distribution given `d_b` between DF and `d_w` within DF."</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (d_b<span class="op">/</span>d_w)<span class="op">**</span>(d_b<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span>x<span class="op">**</span>(d_b<span class="op">/</span><span class="dv">2</span><span class="op">-</span><span class="dv">1</span>)<span class="op">*</span>(<span class="dv">1</span><span class="op">+</span>x<span class="op">*</span>d_b<span class="op">/</span>d_w)<span class="op">**</span>(<span class="op">-</span>(d_b<span class="op">+</span>d_w)<span class="op">/</span><span class="dv">2</span>)<span class="op">/</span>beta(d_b<span class="op">/</span><span class="dv">2</span>, d_w<span class="op">/</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">7</span>, <span class="dv">100</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> f_distribution(x, <span class="dv">2</span>, <span class="dv">27</span>), f_distribution(x, <span class="dv">9</span>, <span class="dv">40</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">15</span>, <span class="dv">3</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, f <span class="kw">in</span> <span class="bu">zip</span>(axes, fs):</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    ax.plot(x, f, linewidth<span class="op">=</span><span class="fl">2.5</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    ax.grid()</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    ax.tick_params(labelsize<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="dv">0</span>, <span class="fl">1.05</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"Probability density"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"F-ratio"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="anova_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="example-fertilizers" class="level2">
+<h2 class="anchored" data-anchor-id="example-fertilizers">Example: fertilizers</h2>
+<p>Let’s illustrate the concepts that we have introduced above with an example. We consider a field study in which three fertilizers are tested and we want to compare their efficiency. Each fertilizer is used to grow ten plots and, then, the crops are harvested.</p>
+<p>We will use the data in Table 1.1 from {% cite GrafenBook2002%}, where they provide the yield of each plot in tonnes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>yield_1 <span class="op">=</span> np.array([<span class="fl">6.27</span>, <span class="fl">5.36</span>, <span class="fl">6.39</span>, <span class="fl">4.85</span>, <span class="fl">5.99</span>, <span class="fl">7.14</span>, <span class="fl">5.08</span>, <span class="fl">4.07</span>, <span class="fl">4.35</span>, <span class="fl">4.95</span>])</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>yield_2 <span class="op">=</span> np.array([<span class="fl">3.07</span>, <span class="fl">3.29</span>, <span class="fl">4.04</span>, <span class="fl">4.19</span>, <span class="fl">3.41</span>, <span class="fl">3.75</span>, <span class="fl">4.87</span>, <span class="fl">3.94</span>, <span class="fl">6.28</span>, <span class="fl">3.15</span>])</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>yield_3 <span class="op">=</span> np.array([<span class="fl">4.04</span>, <span class="fl">3.79</span>, <span class="fl">4.56</span>, <span class="fl">4.55</span>, <span class="fl">4.53</span>, <span class="fl">3.53</span>, <span class="fl">3.71</span>, <span class="fl">7.00</span>, <span class="fl">4.61</span>, <span class="fl">4.55</span>])</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>yields <span class="op">=</span> np.stack([yield_1, yield_2, yield_3], axis<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s start by visualizing the data and see whether we can clearly identify differences between each group.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n, (a, n_i) <span class="op">=</span> yields.size, yields.shape</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"There are </span><span class="sc">{</span>a<span class="sc">}</span><span class="ss"> groups with </span><span class="sc">{</span>n_i<span class="sc">}</span><span class="ss"> samples each for a total of </span><span class="sc">{</span>n<span class="sc">}</span><span class="ss"> samples."</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>grand_mean, group_means <span class="op">=</span> yields.mean(), yields.mean(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 3 groups with 10 samples each for a total of 30 samples.</code></pre>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(n)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plt.plot(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, yields.ravel())</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>plt.hlines(grand_mean, <span class="dv">0</span>, n, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, m <span class="kw">in</span> <span class="bu">enumerate</span>(group_means):</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    plt.hlines(m, x[n_i<span class="op">*</span>i], x[n_i<span class="op">*</span>(i<span class="op">+</span><span class="dv">1</span>)<span class="op">-</span><span class="dv">1</span>], colors<span class="op">=</span><span class="st">'r'</span>, linestyles<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>) </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.ylim(<span class="dv">2</span>, <span class="dv">8</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>plt.tick_params(labelsize<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Yield (tonnes)"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Sample"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<p><img src="anova_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The gray line indicates the grand mean and the red dashed lines show the sample group means.</p>
+<p>While it looks like the first fertilizer provides the highest yield, on average, we cannot draw clear conclusions as many plots treated with fertilizer 1 yield less crops than some treated with other fertilizers. Furthermore, with such a small amount of samples we could have had good or bad “luck” in some cases so we need a more elaborate analysis to determine whether the observed differences in means are statistically relevant or not.</p>
+<p>Let’s implement what we’ve learned!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ss_within <span class="op">=</span> np.<span class="bu">sum</span>((yields <span class="op">-</span> group_means[:, <span class="va">None</span>])<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>ss_between <span class="op">=</span> np.<span class="bu">sum</span>(n_i<span class="op">*</span>(group_means <span class="op">-</span> grand_mean)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>df_within, df_between <span class="op">=</span> n <span class="op">-</span> a, a <span class="op">-</span> <span class="dv">1</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>ms_within, ms_between <span class="op">=</span> ss_within<span class="op">/</span>df_within, ss_between<span class="op">/</span>df_between</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>f_ratio <span class="op">=</span> ms_between<span class="op">/</span>ms_within</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"F-ratio of </span><span class="sc">{</span>f_ratio<span class="sc">:.4f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>F-ratio of 5.7024.</code></pre>
+</div>
+</div>
+<p>We have found a rather large F-ratio, suggesting that there may be significant differences between fertilizers. However, we have to check the p-value of this F-ratio for the given degrees of freedom.</p>
+<p>To construct the p-value, we have to check what is the probability that the F-ratio is equal or larger to the obtained value under the null hypothesis. For this, we have to integrate the probability distribution from the given value to <span class="math inline">\(+\infty\)</span>, which we will approximate by a fixed value of 100, given that the probability distribution peaks arround 1. Notice that this senario of 3 groups with 10 samples corresponds to the left figure of the F-distribution above.</p>
+<p>Here, we will perform a very basic numerical integration in which we approximate the area under the curve by trapezoids.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>fs <span class="op">=</span> np.linspace(f_ratio, <span class="dv">100</span>, <span class="dv">1000</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>prob <span class="op">=</span> f_distribution(fs, df_between, df_within)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>p_value <span class="op">=</span> np.trapz(prob, x<span class="op">=</span>fs)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"p-value </span><span class="sc">{</span>p_value<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>p-value 0.0086</code></pre>
+</div>
+</div>
+<p>The obtained p-value is significantly lower than the typical <span class="math inline">\(0.05\)</span> threshold, so we can accept the hypothesis that there are significant differences between fertilizers.</p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>{% bibliography –cited %}</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,13 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/2021-10 Statistics/regression.html",
+      "/posts/2021-10 Statistics/anova.html",
+      "/posts/2021-03 VMC with RBM/VMC-intro-RBM.html",
+      "/posts/2020-11 Machine Learning Applications/tabular-data.html",
+      "/posts/2020-11 Machine Learning Applications/nlp.html",
+      "/posts/2020-11 Machine Learning Applications/computer-vision.html"
+    ]
+  }
+]

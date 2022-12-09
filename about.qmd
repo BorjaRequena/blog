@@ -2,18 +2,64 @@
 title: "Borja Requena"
 image: profile.jpg
 about:
-  template: jolla
+  template: broadside
   links:
     - icon: twitter
       text: Twitter
       href: https://twitter.com/BorjaRequena
     - icon: linkedin
       text: LinkedIn
-      href: https://linkedin.com
+      href: https://www.linkedin.com/in/borja-requena-pozo-52365a148/
     - icon: github
       text: Github
       href: https://github.com/BorjaRequena
 
 ---
 
-I'm migrating my former blog and this page is still under construction. Thanks for visiting :D
+Hello there! 
+
+I'm Borja, an engineering physicist with a taste for computation. I'm currently doing my PhD at [ICFO](https://www.icfo.eu/) - The Institute of Photonic Sciences, where I develop machine learning algorithms to tackle problems in quantum and statistical physics.
+
+In my projects, I lean towards the computational side. I love coding and I take great pleasure when things work optimally. Although it is even better when they are also understandable! Therefore, I like to provide my projects and publications with structured code libraries to reproduce my results and, hopefully, provide the reader with a better understanding about the matter.    
+
+Besides computation, I also like the geeky side of computers. I've spent more time than I would like to admit gaming and learning how to build my own computers. I also enjoy life outdoors, though! I love climbing and skiing :D
+
+## Education
+
+| 2024 expected - **PhD in Machine learning for physics**
+|    *ICFO - The Institute of Photonic Sciences*
+| 2018 - **MSc in Intelligent Interactive Systems**
+|    *UPF - Pompeu Fabra University*
+| 2017 - **BSc in Engineering Physics**
+|    *UPC BarcelonaTech - Polytechnic University of Catalonia*
+
+## Experience
+I'm on a bit of a wild ride going from industry to academia and combining pure machine learning and science.
+
+| 2019 - Present -- **PhD Student**
+|    *ICFO - The Institute of Photonic Sciences*
+| 2019 -- **Research stay**
+|    *QMUL - Queen Mary University of London* & *Tooso Inc*
+|    Industrial collaboration that lead to [this paper](https://www.nature.com/articles/s41598-020-73622-y) and the
+|    posterior acquisition of Tooso by Coveo.
+| 2018 -- **Research Intern**
+|    *Telefonica R&D*
+|    I developed the infrastructure to start a research line in
+|    brain-computer interface.
+| 2016-2017 -- **Research fellow** (two [INIREC](https://app.becas-santander.com/en/program/becas-santander-upc-inirec) grants)
+|    *UPC BarcelonaTech* & *Banco Santander*
+|    I studied the electromagnetic properties of sensitive plants
+|    to develop brain imaging techniques.
+
+## Teaching
+
+I really enjoy teaching and I try to do it as much as I can. 
+
+
+* Since 2020, I've been teaching the Machine Learning subjects in the [MSc in Quantum Science and Technology](https://quantummasterbarcelona.eu/) and the [MSc in Photonics](https://photonics.masters.upc.edu/en).
+
+* In 2021 I taught part of the *Statistics and data analysis* course in the [MSc of Multidisciplinary Research in Experimental Sciences](https://mmres.bist.eu/), which inspired [this blogpost series](https://brequena.com/posts/2021-10%20Statistics/anova.html). In the previous year I taught the python programming sessions.
+
+* In August 2021 I taught the programming sessions in the [summer school of machine learning for quantum physics and chemistry](https://szkoly.idub.uw.edu.pl/) in Warsaw.
+
+* From 2019 to 2021 I taught physics to first year engineering students at UPC BarcelonaTech.

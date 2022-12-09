@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://github.com/BorjaRequena/blog/about.html</loc>
+    <lastmod>2022-12-09T17:21:20.330Z</lastmod>
+  </url>
+  <url>
     <loc>https://github.com/BorjaRequena/blog/posts/2021-03 VMC with RBM/VMC-intro-RBM.html</loc>
-    <lastmod>2022-11-15T18:15:12.079Z</lastmod>
+    <lastmod>2022-12-09T17:21:21.646Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/BorjaRequena/blog/posts/2021-10 Statistics/anova.html</loc>
-    <lastmod>2022-11-15T18:15:12.951Z</lastmod>
+    <lastmod>2022-12-09T17:21:22.278Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/BorjaRequena/blog/posts/2021-10 Statistics/regression.html</loc>
-    <lastmod>2022-11-15T18:15:13.595Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/BorjaRequena/blog/posts/2020-11 Machine Learning Applications/tabular-data.html</loc>
-    <lastmod>2022-11-15T18:15:14.083Z</lastmod>
+    <lastmod>2022-12-09T17:21:23.058Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/BorjaRequena/blog/posts/2020-11 Machine Learning Applications/computer-vision.html</loc>
-    <lastmod>2022-11-15T18:15:14.803Z</lastmod>
+    <lastmod>2022-12-09T17:21:23.922Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/BorjaRequena/blog/posts/2020-11 Machine Learning Applications/tabular-data.html</loc>
+    <lastmod>2022-12-09T17:21:24.554Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/BorjaRequena/blog/posts/2020-11 Machine Learning Applications/nlp.html</loc>
-    <lastmod>2022-11-15T18:15:15.327Z</lastmod>
+    <lastmod>2022-12-09T17:21:25.202Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/BorjaRequena/blog/index.html</loc>
-    <lastmod>2022-11-15T18:15:15.727Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/BorjaRequena/blog/about.html</loc>
-    <lastmod>2022-11-15T18:15:16.003Z</lastmod>
+    <lastmod>2022-12-09T17:21:25.678Z</lastmod>
   </url>
 </urlset>

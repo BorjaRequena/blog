@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2021-10-06">
 <meta name="description" content="In a regression analysis, we look for a relationship between two variables. Here, we provide an introduction to linear regression from a statistics point of view with code examples.">
 
-<title>Borja Requena - Statistics perspective on regression</title>
+<title>Statistics perspective on regression – Borja Requena</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,9 +20,11 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -49,43 +51,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -96,22 +68,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-05c339da3cc1198971fa27a4153df9f8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -120,49 +100,83 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Borja Requena</span>
     </a>
   </div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html">
- <span class="menu-text">Borja Requena</span></a>
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">Borja Requena</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/BorjaRequena"><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/BorjaRequena"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/BorjaRequena"><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/BorjaRequena"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -229,14 +243,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
+
 <p>This post is part of a series in which we provide an introduction to statistics and data analysis introducing <a href="https://brequena.com/statistics/data%20analysis/anova/glms/2021/10/05/ANOVA.html">analysis of variance (ANOVA)</a> and regression. They contain most of the teaching material developed for the <a href="https://mmres.bist.eu/">Msc of Multidisciplinary Research in Experimental Sciences (BIST)</a>.</p>
 <p>The main goal is to provide an intuition about the main ideas behind the different techniques together with simple code examples that implement them from scratch.</p>
-<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
-<div class="callout-caption-container flex-fill">
+<div class="callout-title-container flex-fill">
 Note
 </div>
 </div>
@@ -253,27 +268,27 @@ Note
 <h2 class="anchored" data-anchor-id="linear-regression">Linear regression</h2>
 <p>As we have briefly introduced above, in a linear regression setting we only have a single explanatory variable <span class="math inline">\(x\)</span> that follows a linear relationship with the response variable <span class="math inline">\(y\)</span> of the form <span class="math inline">\(y=\alpha+\beta x\)</span>. A linear regression, while being the most simple form of regression, allows us to identify general trends in our data. Furthermore, any smooth function can be approximated by a straight line over a sufficiently short range. Therefore, in an extreme case, we can approximate any function by a series of linear regressions (not recommendable).</p>
 <p>As in <a href="https://brequena.com/statistics/data%20analysis/anova/glms/2021/10/05/ANOVA.html">ANOVA</a>, the true values <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> are inaccessible and the best we can do is to estimate them from our data, obtaining the coefficients <span class="math inline">\(a, b\)</span> such that <span class="math inline">\(y\approx a+bx\)</span>. Below, we show two examples of linear regression using synthetic data with <span class="math inline">\(\alpha=1, \beta=-1\)</span> and different degrees of noise. The black lines indicate the true relationship <span class="math inline">\(y=\alpha + \beta x\)</span> and the red lines show the best estimation <span class="math inline">\(y=a+bx\)</span>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> line(x, a, b):</span>
+<div id="cell-4" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> line(x, a, b):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Evaluates `a + x*b`"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> x<span class="op">*</span>b</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> synthetic_data(x, intercept, slope, std):</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Create a noisy synthetic dataset."</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> line(x, intercept, slope) <span class="op">+</span> std<span class="op">*</span>np.random.randn(<span class="bu">len</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> line(x, intercept, slope) <span class="op">+</span> std<span class="op">*</span>np.random.randn(<span class="bu">len</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">7</span>) <span class="co"># Set random seed for reproducibility</span></span>
+<div id="cell-5" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">7</span>) <span class="co"># Set random seed for reproducibility</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">20</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, n)</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>a, b <span class="op">=</span> <span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>std_easy, std_hard <span class="op">=</span> <span class="fl">0.1</span>, <span class="fl">1.2</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>datasets <span class="op">=</span> synthetic_data(x, a, b, std_easy), synthetic_data(x, a, b, std_hard)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>datasets <span class="op">=</span> synthetic_data(x, a, b, std_easy), synthetic_data(x, a, b, std_hard)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<details>
+<div id="cell-6" class="cell">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">4</span>))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>exact_relation <span class="op">=</span> line(x, a, b)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, ds <span class="kw">in</span> <span class="bu">zip</span>(axes, datasets):</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    ax.scatter(x, ds)</span>
@@ -285,10 +300,14 @@ Note
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="op">-</span><span class="fl">2.5</span>, <span class="fl">3.5</span>)</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    ax.text(<span class="op">-</span><span class="fl">0.49</span>, <span class="fl">2.6</span>, <span class="ss">f"a=</span><span class="sc">{</span>a_est<span class="sc">:.3f}</span><span class="ss">, b=</span><span class="sc">{</span>b_est<span class="sc">:.3f}</span><span class="ss">"</span>, fontsize<span class="op">=</span><span class="dv">15</span>)</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"y"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"x"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"x"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="regression_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="regression_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>In the left plot, we see that the estimates <span class="math inline">\(a,b\)</span> are pretty accurate, given that the data follows a nearly perfect linear relationship. However, in the right plot the linear relationship is not so clear and we only find a generic trend on the data. Consequently, in this last case, the relative errors in the estimation of the coefficients is an order of magnitude larger than in the previous case.</p>
@@ -301,27 +320,31 @@ Note
 \frac{\partial SS}{\partial b} &amp;= -2\sum_{i=1}^n x_i(y_i-a-bx_i) = 0
 \end{align}
 \]</span> considering that every term in the <span class="math inline">\(SS\)</span> can be expressed as <span class="math inline">\((y_i-a-bx_i)^2\)</span>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, n)</span>
+<div id="cell-8" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>, n)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>std <span class="op">=</span> <span class="fl">0.2</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> synthetic_data(x, a, b, std)</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>b_est, a_est <span class="op">=</span> np.polyfit(x, y, <span class="dv">1</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> line(x, a_est, b_est)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> line(x, a_est, b_est)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<details>
+<div id="cell-9" class="cell">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">4</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="dv">4</span>))</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x, fit, color<span class="op">=</span><span class="st">'r'</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.text(<span class="fl">0.05</span>, <span class="fl">1.65</span>, <span class="ss">f"a=</span><span class="sc">{</span>a_est<span class="sc">:.4f}</span><span class="ss">, b=</span><span class="sc">{</span>b_est<span class="sc">:.4f}</span><span class="ss">"</span>, fontsize<span class="op">=</span><span class="dv">15</span>)</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.tick_params(labelsize<span class="op">=</span><span class="dv">15</span>)</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"y"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="regression_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="regression_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -334,10 +357,10 @@ Note
 <p>Then, we rotate the line around the mean coordinate <span class="math inline">\((\bar{x}, \bar{y})\)</span> until we find the one that minimizes the error. Rotating the line, we bring it closer to the data points reducing the overall deviations. Nevertheless, there will still be some variability left to be explained, unless the data follows a perfect line, which we refer to as the error SS denoted <strong><span class="math inline">\(SSE\)</span></strong>. This is the equivalent quantity to the <span class="math inline">\(SS_{within}\)</span> introduced in ANOVA, which quantifies the error between our fit and the datapoints.</p>
 <p>The difference between <span class="math inline">\(SSY\)</span> and <span class="math inline">\(SSE\)</span> is the variability captured by the regression, denoted <strong><span class="math inline">\(SSR\)</span></strong> (analogous to <span class="math inline">\(SS_{between}\)</span>) which quantifies the distance between the grand mean and the fit. Hence, these quantities follow the relationship <span class="math display">\[SSY = SSR + SSE\]</span></p>
 <p>In the plots below we illustrate the distances quantified by each of the terms in a new synthetic dataset.</p>
-<div class="cell">
-<details>
+<div id="cell-11" class="cell">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">4</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">4</span>))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Total SS</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>grand_mean <span class="op">=</span> y.mean()</span>
@@ -351,32 +374,36 @@ Note
 <span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">0</span>].vlines(xi, yi, grand_mean, linestyles<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
 <span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">1</span>].vlines(xi, yi, fi, linestyles<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    axes[<span class="dv">2</span>].vlines(xi, fi, grand_mean, linestyles<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="vs">r"$SSY$"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="vs">r"$SSE$"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="vs">r"$SSR$"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="vs">r"</span><span class="dv">$</span><span class="vs">SSY</span><span class="dv">$</span><span class="vs">"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="vs">r"</span><span class="dv">$</span><span class="vs">SSE</span><span class="dv">$</span><span class="vs">"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="vs">r"</span><span class="dv">$</span><span class="vs">SSR</span><span class="dv">$</span><span class="vs">"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax <span class="kw">in</span> axes:</span>
 <span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    ax.set_ylim(<span class="op">-</span><span class="fl">0.22</span>, <span class="fl">2.4</span>)</span>
 <span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    ax.tick_params(labelsize<span class="op">=</span><span class="dv">13</span>)</span>
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    ax.set_ylabel(<span class="st">"y"</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    ax.set_xlabel(<span class="st">"x"</span>, fontsize<span class="op">=</span><span class="dv">16</span>)</span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    ax.grid(alpha<span class="op">=</span><span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="regression_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="regression_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>In order to perform the proper statistical analysis, we have to take into account the partition of the degrees of freedom (DF). For a dataset with <span class="math inline">\(n\)</span> points, we have <span class="math inline">\((n-1)\)</span> DF for <span class="math inline">\(SSY\)</span> as we know that the deviations are subject to the constraint of adding up to zero. This way, if we know the value of <span class="math inline">\((n-1)\)</span> deviations, we can infer the value of the last one.</p>
 <p>For <span class="math inline">\(SSR\)</span> we have two DF <span class="math inline">\(a, b\)</span>. However, since we have the constraint that the line must go through the mean point <span class="math inline">\((\bar{x}, \bar{y})\)</span>, finding one parameter immediately sets the other and, therefore, we only have one DF. Hence, there are <span class="math inline">\(n-2\)</span> remaining DF for <span class="math inline">\(SSE\)</span> corresponding to the original <span class="math inline">\(n-1\)</span> DF minus a regression coefficient. This last one can also be understood as that we lose two degrees of freedom estimating <span class="math inline">\(a, b\)</span> from the <span class="math inline">\(n\)</span> data points.</p>
 <p>With these quantities, we can perform the ANOVA of our regression.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>grand_mean <span class="op">=</span> y.mean()</span>
+<div id="cell-13" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>grand_mean <span class="op">=</span> y.mean()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sse <span class="op">=</span> np.<span class="bu">sum</span>((y <span class="op">-</span> fit)<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ssr <span class="op">=</span> np.<span class="bu">sum</span>((fit <span class="op">-</span> grand_mean)<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>dfe, dfr <span class="op">=</span> n<span class="op">-</span><span class="dv">2</span>, <span class="dv">1</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>mse, msr <span class="op">=</span> sse<span class="op">/</span>dfe, ssr<span class="op">/</span>dfr</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>f_ratio <span class="op">=</span> msr<span class="op">/</span>mse</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"F-ratio of </span><span class="sc">{</span>f_ratio<span class="sc">:.4f}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"F-ratio of </span><span class="sc">{</span>f_ratio<span class="sc">:.4f}</span><span class="ss">."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>F-ratio of 151.2594.</code></pre>
 </div>
@@ -386,10 +413,10 @@ Note
 <section id="r-squared" class="level4">
 <h4 class="anchored" data-anchor-id="r-squared">R-squared</h4>
 <p>With the same quantities used for the ANOVA, we can compute the <strong><span class="math inline">\(R^2\)</span></strong> metric. The <span class="math inline">\(R^2\)</span> quantifies the fraction of variability explained by the resulting fit <span class="math display">\[R^2 = \frac{SSY-SSE}{SSY} = \frac{SSR}{SSY}.\]</span> In the case of a perfect fit, <span class="math inline">\(SSE=1\)</span> and <span class="math inline">\(R^2=1\)</span>. Hence, values of <span class="math inline">\(R^2\)</span> close to one are indicative of a good fit, while small values may suggest that there are other important variables besides <span class="math inline">\(x\)</span> influencing <span class="math inline">\(y\)</span>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ssy <span class="op">=</span> np.<span class="bu">sum</span>((y <span class="op">-</span> grand_mean)<span class="op">**</span><span class="dv">2</span>)</span>
+<div id="cell-16" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ssy <span class="op">=</span> np.<span class="bu">sum</span>((y <span class="op">-</span> grand_mean)<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>r_sq <span class="op">=</span> ssr<span class="op">/</span>ssy</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"R^2=</span><span class="sc">{</span>r_sq<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"R^2=</span><span class="sc">{</span>r_sq<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R^2=0.8937</code></pre>
 </div>
@@ -401,15 +428,15 @@ Note
 <p>Once we estimate our coefficients <span class="math inline">\(a,b\)</span> we have to address the question of whether the relationship that we have found is statistically relevant. The strength of the relationship is determined by the resulting slope and so we want to know what are the odds that the obtained slope could have simply happened by chance alone.</p>
 <p>This way, we formulate our null hypothesis of no relationship <span class="math inline">\(\beta=0\)</span>, as it is quite natural to assume that there is no relationship until the evidence shows otherwise. Then, we compute the standard error of our slope estimation <span class="math inline">\(\varepsilon_b\)</span>, with which we can check how many standard deviations lie between our estimation from the null hypothesis <span class="math inline">\(t=b/\varepsilon_b\)</span>. Finally, we can perform a t-test and accept or reject the null hypothesis accordingly.</p>
 <p>The standard error of the slope is obtained as <span class="math inline">\(\varepsilon_b=\sqrt{\frac{MSE}{SSX}}\)</span>, where <span class="math inline">\(MSE=SSE/DFE\)</span> and <span class="math inline">\(SSX=\sum_{i=1}^n (x_i - \bar{x})^2\)</span>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> t</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="cell-18" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> t</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ssx <span class="op">=</span> np.<span class="bu">sum</span>((x <span class="op">-</span> x.mean())<span class="op">**</span><span class="dv">2</span>)</span>
+<div id="cell-19" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ssx <span class="op">=</span> np.<span class="bu">sum</span>((x <span class="op">-</span> x.mean())<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>eb <span class="op">=</span> np.sqrt(mse<span class="op">/</span>ssx)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>t_val <span class="op">=</span> b_est<span class="op">/</span>eb</span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>t_ratio <span class="op">=</span> t.pdf(t_val, df<span class="op">=</span>dfe)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"t-ratio </span><span class="sc">{</span>t_ratio<span class="sc">:.2e}</span><span class="ss"> for </span><span class="sc">{</span>t_val<span class="sc">:.2f}</span><span class="ss"> standard deviations away from null hypothesis"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"t-ratio </span><span class="sc">{</span>t_ratio<span class="sc">:.2e}</span><span class="ss"> for </span><span class="sc">{</span>t_val<span class="sc">:.2f}</span><span class="ss"> standard deviations away from null hypothesis"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>t-ratio 2.23e-10 for -12.30 standard deviations away from null hypothesis</code></pre>
 </div>
@@ -423,11 +450,11 @@ Note
 <li><strong>Coefficient interval</strong></li>
 </ul>
 <p>We have computed the standard error of the slope to assess whether the relationship that we have found is statistically significant. These errors allow us to compute confidence intervals for our regression coefficients in a very simple way following the relationship <span class="math display">\[CI = \text{coeff}\pm t_{\text{crit}}\varepsilon_{\text{coeff}}.\]</span> For instance, in the case of the slope we would report <span class="math display">\[CI_b = \text{b}\pm t_{\text{crit}}\varepsilon_b,\]</span> where <span class="math inline">\(t_{\text{crit}}\)</span> is the <a href="https://en.wikipedia.org/wiki/Student%27s_t-distribution#Table_of_selected_values">value of the <span class="math inline">\(t\)</span>-distribution</a> corresponding to the desired confidence, according to the DF. The DF for these estimates are always the DFE.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>t_crit <span class="op">=</span> <span class="fl">2.101</span> <span class="co"># two-sided 95% for 18 df</span></span>
+<div id="cell-21" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>t_crit <span class="op">=</span> <span class="fl">2.101</span> <span class="co"># two-sided 95% for 18 df</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>conf <span class="op">=</span> t_crit<span class="op">*</span>eb</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The vlaue of the slope is </span><span class="sc">{</span>b_est<span class="sc">:.4f}</span><span class="ss">+-</span><span class="sc">{</span>conf<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The true value lies in (</span><span class="sc">{</span>b_est<span class="op">-</span>conf<span class="sc">:.4f}</span><span class="ss">, </span><span class="sc">{</span>b_est<span class="op">+</span>conf<span class="sc">:.4f}</span><span class="ss">) with 95% confidence."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The true value lies in (</span><span class="sc">{</span>b_est<span class="op">-</span>conf<span class="sc">:.4f}</span><span class="ss">, </span><span class="sc">{</span>b_est<span class="op">+</span>conf<span class="sc">:.4f}</span><span class="ss">) with 95% confidence."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The vlaue of the slope is -0.9723+-0.1661
 The true value lies in (-1.1384, -0.8062) with 95% confidence.</code></pre>
@@ -440,26 +467,30 @@ The true value lies in (-1.1384, -0.8062) with 95% confidence.</code></pre>
 <p>On the one hand, even if we assume that our fit <span class="math inline">\(y=a+bx\)</span> matches the true line <span class="math inline">\(y=\alpha+\beta x\)</span>, there will still be some uncertainty due to scattering around the true line. We can provide a confidence interval just as before <span class="math display">\[CI = y\pm t_{\text{crit}}s,\]</span> where <span class="math inline">\(s\)</span> is the standard deviation of the error <span class="math inline">\(s=\sqrt{MSE}\)</span>.</p>
 <p>On the other hand, we also have to account for the fact that our fit does not match the exact true line. The prediction error will be heavily affected by the accuracy with which the slope and the intercept have been estimated. The more samples we have, the better estimates of the coefficients and, the closer to the mean point <span class="math inline">\((\bar{x},\bar{y})\)</span>, the smaller the influence of the slope errors.</p>
 <p>Taking all these aspects into account, we can assign a prediction uncertainty <span class="math inline">\(PI\)</span> to every point <span class="math inline">\(x\)</span> of the form <span class="math display">\[PI(x)=y(x)\pm t_{\text{crit}}s\sqrt{\frac{1}{m}+\frac{1}{n}+\frac{x-\bar{x}}{SSX}},\]</span> where every source of uncertainty adds an additional term: <span class="math inline">\(\frac{1}{m}\)</span> quantifies the scattering around the true line, with <span class="math inline">\(m\)</span> being the number of <span class="math inline">\(y\)</span> values at <span class="math inline">\(x\)</span> (<span class="math inline">\(m=1\)</span> in our case); <span class="math inline">\(\frac{1}{n}\)</span> quantifies the uncertainty in the intercept estimation <span class="math inline">\(a\)</span>, the more datapoints, the lower the error; <span class="math inline">\(\frac{x-\bar{x}}{SSX}\)</span> accounts for the uncertainty in the slope, the errors grow as we get further from the mean point.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.sqrt(mse)</span>
+<div id="cell-23" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.sqrt(mse)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>xx <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">100</span>)</span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> line(xx, a_est, b_est)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>interval <span class="op">=</span> t_crit<span class="op">*</span>s<span class="op">*</span>np.sqrt(<span class="dv">1</span><span class="op">/</span>m <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>n <span class="op">+</span> (xx <span class="op">-</span> x.mean())<span class="op">/</span>ssx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>interval <span class="op">=</span> t_crit<span class="op">*</span>s<span class="op">*</span>np.sqrt(<span class="dv">1</span><span class="op">/</span>m <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>n <span class="op">+</span> (xx <span class="op">-</span> x.mean())<span class="op">/</span>ssx)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<details>
+<div id="cell-24" class="cell">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>plt.plot(xx, pred, color<span class="op">=</span><span class="st">'r'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>plt.fill_between(xx, pred <span class="op">+</span> interval, pred <span class="op">-</span> interval, alpha<span class="op">=</span><span class="fl">0.15</span>)</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>plt.tick_params(labelsize<span class="op">=</span><span class="dv">15</span>)</span>
 <span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"y"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"y"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="regression_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="regression_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -470,10 +501,10 @@ The true value lies in (-1.1384, -0.8062) with 95% confidence.</code></pre>
 <p>Additionally, we have to account for <strong>outliers</strong>, which are points that do not follow the distribution of our data. We can identify these points by standardizing the residuals diving by their standard deviation. This way, we should find <span class="math inline">\(95\%\)</span> of our samples within 2 standard deviations from the line. The outliers are the remaining <span class="math inline">\(5\%\)</span> of our data (1 every 20 samples) and, by definition, lie far from the line yielding large errors.</p>
 <p>Outliers can be extremely harmful for our estimation if they are found in an influential position. In some cases, the data is curated by removing the outliers in order to prevent such situations. However, that is not the best practice and, whenever it is performed, there should be reported results before and after the outlier removal.</p>
 <p>Below we show three cases in which we can see the effect of influential points.</p>
-<div class="cell">
-<details>
+<div id="cell-26" class="cell">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>x_out <span class="op">=</span> [<span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="fl">0.1</span>]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>x_out <span class="op">=</span> [<span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="fl">0.1</span>]</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>y_out <span class="op">=</span> a <span class="op">+</span> b<span class="op">*</span>x_out[<span class="dv">0</span>], <span class="fl">0.6</span>, <span class="dv">0</span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">4</span>))</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, x_o, y_o <span class="kw">in</span> <span class="bu">zip</span>(axes, x_out, y_out):</span>
@@ -493,10 +524,14 @@ The true value lies in (-1.1384, -0.8062) with 95% confidence.</code></pre>
 <span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">0</span>].set_title(<span class="st">"Beneficial"</span>,fontsize<span class="op">=</span><span class="dv">20</span>)</span>
 <span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">1</span>].set_title(<span class="st">"Harmful outlier"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="st">"Harmless outlier"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>axes[<span class="dv">2</span>].set_title(<span class="st">"Harmless outlier"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="regression_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="regression_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>On the left, we see an influential point that is over the exact distributiond. Then, in the middle, we see an influential point that is an outlier, significantly harming the resulting fit. Finally, on the right, we see an outlier that is found in a position with little influence, barely affecting our fit.</p>
@@ -507,8 +542,8 @@ The true value lies in (-1.1384, -0.8062) with 95% confidence.</code></pre>
 <h2 class="anchored" data-anchor-id="example-weather-in-szeged">Example: weather in Szeged</h2>
 <p>Let’s now perform a regression analysis on a real example. We’ve taken the <a href="https://www.kaggle.com/budincsevity/szeged-weather">weather in Szeged 2006-2016 dataset</a> from <a href="https://www.kaggle.com/">Kaggle</a>. We will see whether there is any clear relationship between the apparent temperature and the humidity.</p>
 <p>In order to make things easy, we’ve taken a small sample of the whole dataset with 50 points.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>humidity <span class="op">=</span> np.array([<span class="fl">0.98</span>, <span class="fl">0.85</span>, <span class="fl">0.82</span>, <span class="fl">0.75</span>, <span class="fl">0.85</span>, <span class="fl">0.99</span>, <span class="fl">0.44</span>, <span class="fl">0.96</span>, <span class="fl">0.6</span> , <span class="fl">0.54</span>, <span class="fl">0.73</span>,</span>
+<div id="cell-28" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>humidity <span class="op">=</span> np.array([<span class="fl">0.98</span>, <span class="fl">0.85</span>, <span class="fl">0.82</span>, <span class="fl">0.75</span>, <span class="fl">0.85</span>, <span class="fl">0.99</span>, <span class="fl">0.44</span>, <span class="fl">0.96</span>, <span class="fl">0.6</span> , <span class="fl">0.54</span>, <span class="fl">0.73</span>,</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                     <span class="fl">0.51</span>, <span class="fl">0.86</span>, <span class="fl">0.78</span>, <span class="fl">0.83</span>, <span class="fl">0.99</span>, <span class="fl">0.75</span>, <span class="fl">0.93</span>, <span class="fl">0.94</span>, <span class="fl">0.77</span>, <span class="fl">0.45</span>, <span class="fl">0.93</span>,</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>                     <span class="fl">0.66</span>, <span class="fl">0.85</span>, <span class="fl">0.63</span>, <span class="fl">0.79</span>, <span class="fl">0.8</span> , <span class="fl">0.75</span>, <span class="fl">0.47</span>, <span class="fl">0.86</span>, <span class="fl">0.73</span>, <span class="fl">0.43</span>, <span class="fl">0.81</span>,</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>                     <span class="fl">0.8</span> , <span class="fl">0.51</span>, <span class="fl">0.97</span>, <span class="fl">0.66</span>, <span class="fl">0.34</span>, <span class="fl">0.87</span>, <span class="fl">0.93</span>, <span class="fl">0.85</span>, <span class="fl">0.73</span>, <span class="fl">0.5</span> , <span class="fl">0.92</span>,</span>
@@ -520,18 +555,18 @@ The true value lies in (-1.1384, -0.8062) with 95% confidence.</code></pre>
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>                     <span class="fl">5.0444</span>, <span class="op">-</span><span class="fl">1.3444</span>, <span class="op">-</span><span class="fl">6.700</span>, <span class="op">-</span><span class="fl">2.0222</span>, <span class="fl">21.0333</span>, <span class="fl">1.7778</span>, <span class="fl">10.1389</span>, <span class="fl">22.0222</span>,</span>
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>                     <span class="fl">5.2167</span>, <span class="fl">3.2444</span>, <span class="fl">12.7778</span>, <span class="fl">17.3944</span>, <span class="fl">1.9833</span>, <span class="fl">24.9500</span>, <span class="fl">9.8778</span>, <span class="fl">7.4444</span>,</span>
 <span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>                     <span class="op">-</span><span class="fl">2.7333</span>, <span class="op">-</span><span class="fl">15.1722</span>, <span class="fl">22.7778</span>, <span class="op">-</span><span class="fl">5.5611</span>, <span class="fl">5.0889</span>, <span class="fl">6.9444</span>, <span class="fl">22.0611</span>, <span class="op">-</span><span class="fl">2.0944</span>,</span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>                     <span class="fl">5.8056</span>, <span class="op">-</span><span class="fl">2.9222</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>                     <span class="fl">5.8056</span>, <span class="op">-</span><span class="fl">2.9222</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(app_temp)</span>
+<div id="cell-29" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(app_temp)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>grand_mean <span class="op">=</span> app_temp.mean()</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>b_est, a_est <span class="op">=</span> np.polyfit(humidity, app_temp, <span class="dv">1</span>)</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> line(humidity, a_est, b_est)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> line(humidity, a_est, b_est)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<details>
+<div id="cell-30" class="cell">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>xx <span class="op">=</span> np.linspace(<span class="fl">0.2</span>, <span class="dv">1</span>, <span class="dv">100</span>)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>xx <span class="op">=</span> np.linspace(<span class="fl">0.2</span>, <span class="dv">1</span>, <span class="dv">100</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(humidity, app_temp)</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(humidity, fit)</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plt.plot(xx, line(xx, a_est, b_est), color<span class="op">=</span><span class="st">'r'</span>)</span>
@@ -540,14 +575,18 @@ The true value lies in (-1.1384, -0.8062) with 95% confidence.</code></pre>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
 <span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>plt.tick_params(labelsize<span class="op">=</span><span class="dv">15</span>)</span>
 <span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Humidity"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Apparent temperature"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Apparent temperature"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="regression_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="regression_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+</figure>
 </div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ssy <span class="op">=</span> np.<span class="bu">sum</span>((app_temp <span class="op">-</span> grand_mean)<span class="op">**</span><span class="dv">2</span>)</span>
+</div>
+<div id="cell-31" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>ssy <span class="op">=</span> np.<span class="bu">sum</span>((app_temp <span class="op">-</span> grand_mean)<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>sse <span class="op">=</span> np.<span class="bu">sum</span>((app_temp <span class="op">-</span> fit)<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>ssr <span class="op">=</span> np.<span class="bu">sum</span>((fit <span class="op">-</span> grand_mean)<span class="op">**</span><span class="dv">2</span>)</span>
 <span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>ssx <span class="op">=</span> np.<span class="bu">sum</span>((humidity <span class="op">-</span> humidity.mean())<span class="op">**</span><span class="dv">2</span>)</span>
@@ -560,7 +599,7 @@ The true value lies in (-1.1384, -0.8062) with 95% confidence.</code></pre>
 <span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>t_ratio <span class="op">=</span> t.pdf(t_val, df<span class="op">=</span>dfe)</span>
 <span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"F   = </span><span class="sc">{</span>f_ratio<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
 <span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"R^2 = </span><span class="sc">{</span>r_sq<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"t-ratio = </span><span class="sc">{</span>t_ratio<span class="sc">:.2e}</span><span class="ss"> for </span><span class="sc">{</span>t_val<span class="sc">:.2f}</span><span class="ss"> standard deviations away from null hypothesis"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"t-ratio = </span><span class="sc">{</span>t_ratio<span class="sc">:.2e}</span><span class="ss"> for </span><span class="sc">{</span>t_val<span class="sc">:.2f}</span><span class="ss"> standard deviations away from null hypothesis"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>F   = 24.6608
 R^2 = 0.3394
@@ -568,36 +607,40 @@ t-ratio = 1.54e-05 for -4.97 standard deviations away from null hypothesis</code
 </div>
 </div>
 <p>While a large F indicates that the fit line explains a big part of the variance, the low <span class="math inline">\(R^2\)</span> indicates that there is still a lot of error left and that, most likely, there are other aspects besides humidity influencing the apparent temperature.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>t_crit <span class="op">=</span> <span class="fl">2.009</span> <span class="co"># two-sided 95% for 50 df, should be 48 df</span></span>
+<div id="cell-33" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>t_crit <span class="op">=</span> <span class="fl">2.009</span> <span class="co"># two-sided 95% for 50 df, should be 48 df</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>conf <span class="op">=</span> t_crit<span class="op">*</span>eb</span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The vlaue of the slope is </span><span class="sc">{</span>b_est<span class="sc">:.4f}</span><span class="ss">+-</span><span class="sc">{</span>conf<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The true value lies in (</span><span class="sc">{</span>b_est<span class="op">-</span>conf<span class="sc">:.4f}</span><span class="ss">, </span><span class="sc">{</span>b_est<span class="op">+</span>conf<span class="sc">:.4f}</span><span class="ss">) with 95% confidence."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The true value lies in (</span><span class="sc">{</span>b_est<span class="op">-</span>conf<span class="sc">:.4f}</span><span class="ss">, </span><span class="sc">{</span>b_est<span class="op">+</span>conf<span class="sc">:.4f}</span><span class="ss">) with 95% confidence."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The vlaue of the slope is -34.1349+-13.8094
 The true value lies in (-47.9443, -20.3255) with 95% confidence.</code></pre>
 </div>
 </div>
 <p>The confidence interval for the slope is rather broad, as the sttistical error is quite high (order of 40%). It is not surprising seeing how the data points are spread over the line. Let’s build the prediction interval.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.sqrt(mse)</span>
+<div id="cell-35" class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> np.sqrt(mse)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>pred <span class="op">=</span> line(xx, a_est, b_est)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>interval <span class="op">=</span> t_crit<span class="op">*</span>s<span class="op">*</span>np.sqrt(<span class="dv">1</span><span class="op">/</span>m <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>n <span class="op">+</span> (xx <span class="op">-</span> x.mean())<span class="op">/</span>ssx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>interval <span class="op">=</span> t_crit<span class="op">*</span>s<span class="op">*</span>np.sqrt(<span class="dv">1</span><span class="op">/</span>m <span class="op">+</span> <span class="dv">1</span><span class="op">/</span>n <span class="op">+</span> (xx <span class="op">-</span> x.mean())<span class="op">/</span>ssx)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="cell">
-<details>
+<div id="cell-36" class="cell">
+<details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(humidity, app_temp)</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(humidity, app_temp)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>plt.plot(xx, pred, color<span class="op">=</span><span class="st">'r'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>plt.fill_between(xx, pred <span class="op">+</span> interval, pred <span class="op">-</span> interval, alpha<span class="op">=</span><span class="fl">0.15</span>)</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>plt.tick_params(labelsize<span class="op">=</span><span class="dv">15</span>)</span>
 <span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"y"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"y"</span>, fontsize<span class="op">=</span><span class="dv">20</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="regression_files/figure-html/cell-23-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="regression_files/figure-html/cell-23-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 
@@ -606,139 +649,407 @@ The true value lies in (-47.9443, -20.3255) with 95% confidence.</code></pre>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
-    }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
     };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
-    });
-  }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
-    } else {
-      return undefined;
+      return false;
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/BorjaRequena\.github\.io\/blog\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script>
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 </div> <!-- /content -->
+
 
 
 

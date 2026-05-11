@@ -6,7 +6,10 @@ website:
   description: "A descriptive description"
   navbar:
     right:
-      - about.qmd
+      - text: "Blog"
+        href: index.qmd
+      - text: "About"
+        href: about.qmd
       - icon: github
         href: https://github.com/BorjaRequena
       - icon: twitter

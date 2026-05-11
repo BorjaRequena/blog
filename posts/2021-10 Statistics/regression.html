@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.37">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -12,6 +12,9 @@
 
 <title>Statistics perspective on regression – Borja Requena</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -70,15 +73,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="../../">
 <script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7f8f88aac4f3542376d5c11b86a4c14d.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-05c339da3cc1198971fa27a4153df9f8.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-9eb2dcf4296333510909099cc84966dc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -108,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -147,8 +149,6 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
-    </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Borja Requena</span>
     </a>
@@ -316,7 +316,7 @@ Note
 <p>Now that we have built some intuition about he problem, let us dive into the details of how we find the previous red lines. The best fit is the line that minimizes the sum of all errors to our data points. However, the deviations from the line <span class="math inline">\(y_i-y(x_i)\)</span> can take positive and negative values, as in the calculation of the variance in <a href="https://brequena.com/statistics/data%20analysis/anova/glms/2021/10/05/ANOVA.html">ANOVA</a>. Hence, we quantify the error by the sum of squares (SS) of the deviations <span class="math display">\[SS = \sum_{i=1}^n (y_i-y(x_i))^2,\]</span> where <span class="math inline">\(y(x_i)\)</span> indicates the prediction of the fit line at the point <span class="math inline">\(x_i\)</span>. The minimization of the SS gives the name to the algorithm: <strong>least squares</strong>.</p>
 <p>In practice, this optimization is usually performed by derivating <span class="math inline">\(SS\)</span> with respect to the function parameters and setting the equations to zero, as in <a href="https://en.wikipedia.org/wiki/Linear_least_squares#Example">this example</a>. In this case, we would solve the system of equations <span class="math display">\[
 \begin{align}
-\frac{\partial SS}{\partial a} &amp;= 2\left(na - \sum_{i=1}^n y_i - bx_i\night) = 0 \\
+\frac{\partial SS}{\partial a} &amp;= 2\left(na - \sum_{i=1}^n y_i - bx_i\right) = 0 \\
 \frac{\partial SS}{\partial b} &amp;= -2\sum_{i=1}^n x_i(y_i-a-bx_i) = 0
 \end{align}
 \]</span> considering that every term in the <span class="math inline">\(SS\)</span> can be expressed as <span class="math inline">\((y_i-a-bx_i)^2\)</span>.</p>

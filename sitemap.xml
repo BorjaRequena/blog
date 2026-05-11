@@ -2,34 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://BorjaRequena.github.io/blog/index.html</loc>
-    <lastmod>2025-10-19T18:44:43.704Z</lastmod>
+    <lastmod>2026-05-11T17:07:29.675Z</lastmod>
   </url>
   <url>
     <loc>https://BorjaRequena.github.io/blog/posts/2021-10 Statistics/anova.html</loc>
-    <lastmod>2025-10-19T18:44:43.730Z</lastmod>
-  </url>
-  <url>
-    <loc>https://BorjaRequena.github.io/blog/posts/2020-11 Machine Learning Applications/nlp.html</loc>
-    <lastmod>2025-10-19T18:44:43.724Z</lastmod>
-  </url>
-  <url>
-    <loc>https://BorjaRequena.github.io/blog/posts/2020-11 Machine Learning Applications/tabular-data.html</loc>
-    <lastmod>2025-10-19T18:44:43.726Z</lastmod>
-  </url>
-  <url>
-    <loc>https://BorjaRequena.github.io/blog/about.html</loc>
-    <lastmod>2025-10-19T18:44:43.704Z</lastmod>
-  </url>
-  <url>
-    <loc>https://BorjaRequena.github.io/blog/posts/2020-11 Machine Learning Applications/computer-vision.html</loc>
-    <lastmod>2025-10-19T18:44:43.723Z</lastmod>
-  </url>
-  <url>
-    <loc>https://BorjaRequena.github.io/blog/posts/2021-10 Statistics/regression.html</loc>
-    <lastmod>2025-10-19T18:44:43.731Z</lastmod>
+    <lastmod>2026-05-11T17:07:29.700Z</lastmod>
   </url>
   <url>
     <loc>https://BorjaRequena.github.io/blog/posts/2021-03 VMC with RBM/VMC-intro-RBM.html</loc>
-    <lastmod>2025-10-19T18:44:43.728Z</lastmod>
+    <lastmod>2026-05-11T17:07:29.698Z</lastmod>
+  </url>
+  <url>
+    <loc>https://BorjaRequena.github.io/blog/posts/2020-11 Machine Learning Applications/tabular-data.html</loc>
+    <lastmod>2026-05-11T17:07:29.696Z</lastmod>
+  </url>
+  <url>
+    <loc>https://BorjaRequena.github.io/blog/posts/2020-11 Machine Learning Applications/computer-vision.html</loc>
+    <lastmod>2026-05-11T17:07:29.694Z</lastmod>
+  </url>
+  <url>
+    <loc>https://BorjaRequena.github.io/blog/posts/2020-11 Machine Learning Applications/nlp.html</loc>
+    <lastmod>2026-05-11T17:07:29.695Z</lastmod>
+  </url>
+  <url>
+    <loc>https://BorjaRequena.github.io/blog/posts/2021-10 Statistics/regression.html</loc>
+    <lastmod>2026-05-11T17:07:29.701Z</lastmod>
+  </url>
+  <url>
+    <loc>https://BorjaRequena.github.io/blog/about.html</loc>
+    <lastmod>2026-05-11T17:07:29.675Z</lastmod>
   </url>
 </urlset>
